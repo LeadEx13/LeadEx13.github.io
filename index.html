@@ -81,10 +81,9 @@
 	
         <h3>I'm Vlad</h3>
         <span class="tag">Software Engineer and App Developer</span>
-        <p><span>Software Engineer student at Sami Shamoon College of Engineering,
-          pursuing an undergraduate degree. I'm majoring in Computer Science, with intent to Game Development. I'm involved as a Software Developer to develop useful programs, where I use my software engineering skills.
-		  I also serve as a network manager responsible for server managment. I'm interested in exploring the fields of Software
-          Engineering, Data Science, and I'm open to opportunities for the same.</span></p>
+        <p><span>I am a Software Engineering student at Sami Shamoon College of Engineering, pursuing an undergraduate degree in Computer Science with a focus on Game Development. 
+		As a Software Developer, I create useful programs utilizing my software engineering skills. 
+		I also manage servers as a network manager. I am keen to explore opportunities in Software Engineering and Data Science.</span></p>
         <div class="box-container">
             <div class="box">
               <p><span> Age: </span> 30</p>
@@ -105,6 +104,131 @@
     </div>
 </section>
 <!-- about section ends -->
+
+
+
+<!-- Music Player -->
+<div class="music-player">
+    <div class="player-container">
+        <div class="controls">
+            <button id="prev"><i class="fas fa-backward"></i></button>
+            <audio id="audio" controls></audio>
+            <button id="next"><i class="fas fa-forward"></i></button>
+            <button id="shuffle"><i class="fas fa-random"></i></button>
+        </div>
+        <div id="current-track">No track playing</div>
+        <button id="toggle-playlist">Show Playlist</button>
+        <div class="playlist">
+            <ul>
+                <li data-src="./assests/Music/Chains of Doubt.mp3">Chains of Doubt</li>
+                <li data-src="./assests/Music/Edge of Solace.mp3">Edge of Solace</li>
+                <li data-src="./assests/Music/Unchained Fury.mp3">Unchained Fury</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="./assests/js/music-player.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const audio = document.getElementById('audio');
+    const playlist = document.querySelector('.playlist ul');
+    const tracks = playlist.getElementsByTagName('li');
+    const togglePlaylistButton = document.getElementById('toggle-playlist');
+    const playlistContainer = document.querySelector('.playlist');
+    const prevButton = document.getElementById('prev');
+    const nextButton = document.getElementById('next');
+    const shuffleButton = document.getElementById('shuffle');
+    const currentTrackElement = document.getElementById('current-track');
+
+    let currentTrack = 0;
+    let isShuffle = false;
+
+    // Initialize the first track
+    if (tracks.length > 0) {
+        console.log('Initializing first track:', tracks[currentTrack].dataset.src);
+        audio.src = tracks[currentTrack].dataset.src;
+        tracks[currentTrack].classList.add('active');
+        currentTrackElement.textContent = tracks[currentTrack].textContent;
+    } else {
+        console.error('No tracks found in the playlist.');
+    }
+
+    // Play the track when clicked and update the active class
+    playlist.addEventListener('click', function (e) {
+        if (e.target && e.target.nodeName === 'LI') {
+            for (let i = 0; i < tracks.length; i++) {
+                tracks[i].classList.remove('active');
+            }
+            e.target.classList.add('active');
+            currentTrack = Array.from(tracks).indexOf(e.target);
+            console.log('Track selected:', e.target.dataset.src);
+            audio.src = e.target.dataset.src;
+            currentTrackElement.textContent = e.target.textContent;
+            audio.play().catch(error => {
+                console.error('Audio playback error:', error);
+                console.log('Attempting to load audio source directly...');
+                audio.load();
+                audio.play().catch(err => console.error('Audio playback retry error:', err));
+            }); // Log errors
+        }
+    });
+
+    // Auto-play the next track when the current one ends
+    audio.addEventListener('ended', function () {
+        nextTrack();
+    });
+
+    // Add event listener for audio errors
+    audio.addEventListener('error', function (e) {
+        console.error('Audio error:', e);
+    });
+
+    // Toggle playlist visibility
+    togglePlaylistButton.addEventListener('click', function () {
+        if (playlistContainer.style.display === 'none' || playlistContainer.style.display === '') {
+            playlistContainer.style.display = 'block';
+            togglePlaylistButton.textContent = 'Hide Playlist';
+        } else {
+            playlistContainer.style.display = 'none';
+            togglePlaylistButton.textContent = 'Show Playlist';
+        }
+    });
+
+    // Next track functionality
+    function nextTrack() {
+        if (isShuffle) {
+            currentTrack = Math.floor(Math.random() * tracks.length);
+        } else {
+            currentTrack = (currentTrack + 1) % tracks.length;
+        }
+        tracks[currentTrack].click();
+    }
+
+    // Previous track functionality
+    function prevTrack() {
+        if (isShuffle) {
+            currentTrack = Math.floor(Math.random() * tracks.length);
+        } else {
+            currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+        }
+        tracks[currentTrack].click();
+    }
+
+    // Shuffle functionality
+    shuffleButton.addEventListener('click', function () {
+        isShuffle = !isShuffle;
+        shuffleButton.classList.toggle('active', isShuffle);
+        console.log('Shuffle is now', isShuffle);
+    });
+
+    nextButton.addEventListener('click', nextTrack);
+    prevButton.addEventListener('click', prevTrack);
+});
+</script>
+
+
 
 <!-- skills section starts -->
 <section class="skills" id="skills">
@@ -334,15 +458,15 @@
   <div class="box-container">
 
     <div class="box tilt">
-      <img draggable="false" src="./assests/images/projects/TNGameProject.png" alt="" />
+      <img draggable="false" src="./assests/images/projects/MedHub.png" alt="" />
       <div class="content">
         <div class="tag">
-        <h3>First Person Coop Game</h3>
+        <h3>MedHub</h3>
         </div>
         <div class="desc">
-          <p><span>Personal game that I'm working on to learn and practice in game development. Using all Unreal Engine 4 technology.</span></p>
+          <p><span>A full-stack project completed in 4 sprints, creating a fully functional website from scratch using database integration, CI/CD, and hosting tools.</span></p>
           <div class="btns">
-            <a href="https://store.steampowered.com/app/980780/" class="btn" target="_blank"><i class="fas fa-eye"></i> View</a>
+            <a href="https://github.com/MedHubTeam" class="btn" target="_blank"><i class="fas fa-eye"></i> View</a>
             <!--<a href="https://github.com/jigar-sable/Portfolio-Website" class="btn" target="_blank">Code <i class="fas fa-code"></i></a>-->
           </div>
         </div>
@@ -366,45 +490,45 @@
     </div>
 	
 	<div class="box tilt">
-      <img draggable="false" src="./assests/images/projects/MLFinal.jpg" alt="" />
+      <img draggable="false" src="./assests/images/projects/Easy DB Viewer.png" alt="" />
       <div class="content">
         <div class="tag">
-        <h3>Machine-Learning final project</h3>
+        <h3>Easy DB Viewer</h3>
         </div>
         <div class="desc">
-          <p><span>Machine Learning path finder in a random genereted mage.</span></p>
+          <p><span>A user-friendly database application featuring all essential tables, ideal for those with limited database knowledge, eliminating the need to remember or manage individual tables.</span></p>
           <div class="btns">
-            <!--<a href="https://github.com/LeadEx13/ML-Finals" class="btn" target="_blank"><i class="fas fa-eye"></i> View</a>-->
-            <a href="https://github.com/LeadEx13/ML-Finals" class="btn" target="_blank"><i class="fas fa-code"></i> Code</a>
+		    <!-- <a href="https://github.com/leadex13" class="btn" target="_blank"><i class="fas fa-eye"></i> View</a>-->
+            <a href="https://github.com/LeadEx13/Easy-DB-viewer" class="btn" target="_blank"><i class="fas fa-code"></i> Code</a>
           </div>
         </div>
       </div>
     </div>
 	
     <div class="box tilt">
-      <img draggable="false" src="./assests/images/projects/Strong-Password.jpeg" alt="" />
+      <img draggable="false" src="./assests/images/projects/Easy DB Viewer Web.png" alt="" />
       <div class="content">
         <div class="tag">
-        <h3>Strong Password</h3>
+        <h3>Easy DB Viewer Web</h3>
         </div>
         <div class="desc">
-          <p>Strong password generator, generate password between 4 and 12 symbols and automatically copy to your clipboard.</p>
+          <p>A user-friendly web-based database application featuring all essential tables, perfect for users with limited database knowledge, eliminating the need to remember or manage individual tables.</p>
           <div class="btns">
            <!-- <a href="https://github.com/leadex13" class="btn" target="_blank"><i class="fas fa-eye"></i> View</a>-->
-            <a href="https://github.com/LeadEx13/StrongPasswordGenerator" class="btn" target="_blank">Code <i class="fas fa-code"></i></a>
+            <a href="https://github.com/LeadEx13/Easy-DB-viewer-Web" class="btn" target="_blank">Code <i class="fas fa-code"></i></a>
           </div>
         </div>
       </div>
     </div>
 	
     <div class="box tilt">
-      <img draggable="false" src="./assests/images/projects/esp32-devkit.jpg" alt="" />
+      <img draggable="false" src="./assests/images/projects/soon.jpg" alt="" />
       <div class="content">
         <div class="tag">
-        <h3>Arduino Project</h3>
+        <h3>New project coming soon</h3>
         </div>
         <div class="desc">
-          <p>description of a arduino project coming soon.</p>
+          <p>description of a new project coming soon.</p>
           <div class="btns">
             <a href="https://github.com/leadex13" class="btn" target="_blank"><i class="fas fa-eye"></i> View</a>
             <a href="https://github.com/leadex13" class="btn" target="_blank">Code <i class="fas fa-code"></i></a>
@@ -568,7 +692,7 @@
 
       <div class="box">
           <h3>Vlad's Portfolio</h3>
-          <p>Thank you for visiting my personal portfolio website. Connect with me over socials. <br/> <br/> Please wait for a while all major projects will be listed soon. Till then keep visiting. Connect with me over live chat!</p>
+          <p>Thank you for visiting my personal portfolio website. Connect with me over socials. <br/> <br/> Please wait for a while all major projects will be listed soon. Till then keep visiting. Connect with me over live chat! <br/> <br/> All songs were generated using the AI tool Udio, with all rights protected for use.</p>
       </div>
 
       <div class="box">
